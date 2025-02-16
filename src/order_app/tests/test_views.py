@@ -1,11 +1,11 @@
 from rest_framework import status
 
-from utils.tests import TestCase
+from utils.tests import APITestCase
 from product_app.models import Product, ProductVariation, ProductVariationItem
 from order_app.models import Order, OrderItem
 
 
-class OrderItemTestCase(TestCase):
+class OrderItemTestCase(APITestCase):
 
     def setUp(self):
         super().setUp()
@@ -39,8 +39,7 @@ class OrderItemTestCase(TestCase):
         # STEP 1
         res1 = self.client.post(
             url,
-            data,
-            json=True
+            data
         )
         self.assertTrue(res1.status_code == status.HTTP_200_OK)
 
@@ -58,8 +57,7 @@ class OrderItemTestCase(TestCase):
         # STEP 2
         res2 = self.client.post(
             url,
-            data,
-            json=True
+            data
         )
         self.assertTrue(res2.status_code == status.HTTP_200_OK)
 
@@ -81,8 +79,7 @@ class OrderItemTestCase(TestCase):
         }
         res3 = self.client.post(
             url,
-            data2,
-            json=True
+            data2
         )
         self.assertTrue(res3.status_code == status.HTTP_200_OK)
 
@@ -152,8 +149,7 @@ class OrderItemTestCase(TestCase):
         }
         res1 = self.client.post(
             url,
-            data,
-            json=True
+            data
         )
 
         self.assertTrue(res1.status_code == status.HTTP_200_OK)
@@ -172,8 +168,7 @@ class OrderItemTestCase(TestCase):
         # STEP 3
         res2 = self.client.post(
             url,
-            data,
-            json=True
+            data
         )
         self.assertTrue(res2.status_code == status.HTTP_200_OK)
 
@@ -196,8 +191,7 @@ class OrderItemTestCase(TestCase):
         }
         res3 = self.client.post(
             url,
-            data2,
-            json=True
+            data2
         )
         self.assertTrue(res3.status_code == status.HTTP_200_OK)
 
@@ -220,8 +214,7 @@ class OrderItemTestCase(TestCase):
         }
         res4 = self.client.post(
             url,
-            data4,
-            json=True
+            data4
         )
         self.assertTrue(res4.status_code == status.HTTP_200_OK)
 
@@ -262,8 +255,7 @@ class OrderItemTestCase(TestCase):
         }
         res = self.client.post(
             url,
-            data,
-            json=True
+            data
         )
         self.assertTrue(res.status_code == status.HTTP_200_OK)
 
@@ -278,8 +270,7 @@ class OrderItemTestCase(TestCase):
         }
         res2 = self.client.post(
             url,
-            data2,
-            json=True
+            data2
         )
         self.assertTrue(res2.status_code == status.HTTP_200_OK)
         self.assertTrue(OrderItem.objects.count() == 0)
@@ -324,8 +315,7 @@ class OrderItemTestCase(TestCase):
         }
         res = self.client.post(
             url,
-            data,
-            json=True
+            data
         )
         self.assertTrue(res.status_code == status.HTTP_200_OK)
 
@@ -341,8 +331,7 @@ class OrderItemTestCase(TestCase):
         }
         res2 = self.client.post(
             url,
-            data2,
-            json=True
+            data2
         )
         self.assertTrue(res2.status_code == status.HTTP_200_OK)
         self.assertTrue(OrderItem.objects.count() == 0)
@@ -363,8 +352,7 @@ class OrderItemTestCase(TestCase):
         }
         res = self.client.post(
             url,
-            data,
-            json=True
+            data
         )
         self.assertTrue(res.status_code == status.HTTP_400_BAD_REQUEST)
 
@@ -384,8 +372,7 @@ class OrderItemTestCase(TestCase):
         }
         res = self.client.post(
             url,
-            data,
-            json=True
+            data
         )
         self.assertTrue(res.status_code == status.HTTP_400_BAD_REQUEST)
 
@@ -405,8 +392,7 @@ class OrderItemTestCase(TestCase):
         }
         res = self.client.post(
             url,
-            data,
-            json=True
+            data
         )
         self.assertTrue(res.status_code == status.HTTP_400_BAD_REQUEST)
 
@@ -427,8 +413,7 @@ class OrderItemTestCase(TestCase):
         }
         res = self.client.post(
             url,
-            data,
-            json=True
+            data
         )
         self.assertTrue(res.status_code == status.HTTP_400_BAD_REQUEST)
 
@@ -449,8 +434,7 @@ class OrderItemTestCase(TestCase):
         }
         res = self.client.post(
             url,
-            data,
-            json=True
+            data
         )
         self.assertTrue(res.status_code == status.HTTP_400_BAD_REQUEST)
 
@@ -486,13 +470,12 @@ class OrderItemTestCase(TestCase):
         }
         res = self.client.post(
             url,
-            data,
-            json=True
+            data
         )
         self.assertTrue(res.status_code == status.HTTP_400_BAD_REQUEST)
 
 
-class OrderTestCase(TestCase):
+class OrderTestCase(APITestCase):
 
     def setUp(self):
         super().setUp()
@@ -570,7 +553,7 @@ class OrderTestCase(TestCase):
         self.assertIn('total_price_calculated', json)
         self.assertIn('total_discount_calculated', json)
         self.assertIn('items', json)
-        self.assertTrue(json['total_price_calculated'] == 23.0)
+        self.assertTrue(json['total_price_calculated'] == 26.0)
 
         items = json['items']
 

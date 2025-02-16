@@ -4,9 +4,12 @@ from django.conf import settings
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+
     path('ckeditor/', include('ckeditor_uploader.urls')),
     path('api/api-auth/', include('rest_framework.urls')),
+
     path('api/order/', include('order_app.urls')),
+    path('api/address/', include('address_app.urls')),
 ]
 
 

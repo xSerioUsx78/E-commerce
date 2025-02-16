@@ -19,8 +19,8 @@ class OrderItemViewSet(
         url_name="action",
         serializer_class=serializers.OrderItemActionSerializer
     )
-    def perform_action(self):
-        serializer = self.get_serializer(data=self.request.data)
+    def perform_action(self, request):
+        serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         order_item_id = serializer.perform_action()
         return Response({
@@ -40,17 +40,16 @@ class OrderViewSet(
         serializer_class=serializers.OrderCartSerializer,
         permission_classes=(permissions.IsAuthenticated, )
     )
-    def cart(self):
+    def cart(self, request):
         obj = models.Order.objects.filter(
-            user=self.request.user
+            user=request.user
         ).annotate(
             total_price_calculated=Sum(
                 F("items__product__price") * F("items__quantity"),
                 distinct=True
-            ) + Sum(F("items__product_variation_items__price")),
+            ) + Sum(F("items__product_variation_items__price") * F("items__quantity")),
             total_discount_calculated=Sum(
-                F("items__product__discount") * F("items__quantity"),
-                distinct=True
+                F("items__product__discount") * F("items__quantity")
             )
         ).prefetch_related(
             "items__product",
