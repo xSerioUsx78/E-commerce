@@ -1,4 +1,4 @@
-# Databse
+# Database
 
 ```bash
 $ sudo su - postgres
