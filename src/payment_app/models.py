@@ -29,8 +29,8 @@ class Payment(TimestampedModel):
         blank=True,
         null=True
     )
+    STATUS = choices.Status.choices
     status = StatusField(
-        choices=choices.Status.choices,
         null=True
     )
     finished_at = MonitorField(
