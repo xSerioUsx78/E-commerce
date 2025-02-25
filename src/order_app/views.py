@@ -63,18 +63,18 @@ class OrderViewSet(
     @action(
         methods=['POST'],
         detail=False,
-        url_path="pay",
+        url_path="create-payment-link",
         serializer_class=serializers.OrderPaySerializer,
         permission_classes=(permissions.IsAuthenticated, )
     )
-    def pay(self, request):
+    def create_payment_link(self, request):
         """
         TODO:
             We should create a payment link for the user order to procced the payment.
         """
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        res_data = serializer.create_payment()
+        res_data = serializer.create_payment_link()
         return Response(
             res_data,
             status.HTTP_200_OK

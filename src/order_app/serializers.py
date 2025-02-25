@@ -139,7 +139,7 @@ class OrderCartSerializer(serializers.ModelSerializer):
         )
 
 
-class OrderPaySerializer(serializers.Serializer):
+class OrderCreatePaymentLinkSerializer(serializers.Serializer):
 
     address = serializers.IntegerField(
         min_value=1,
@@ -182,7 +182,7 @@ class OrderPaySerializer(serializers.Serializer):
 
         return attrs
 
-    def create_payment(self):
+    def create_payment_link(self):
         """
         TODO:
             We should check the method payment and create link or doing whatever needed
