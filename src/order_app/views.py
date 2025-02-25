@@ -63,11 +63,11 @@ class OrderViewSet(
     @action(
         methods=['POST'],
         detail=False,
-        url_path="create_payment",
+        url_path="pay",
         serializer_class=serializers.OrderPaySerializer,
         permission_classes=(permissions.IsAuthenticated, )
     )
-    def create_payment(self, request):
+    def pay(self, request):
         """
         TODO:
             We should create a payment link for the user order to procced the payment.
