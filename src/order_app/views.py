@@ -1,5 +1,5 @@
 from django.db.models import Sum, F
-from rest_framework import permissions, viewsets
+from rest_framework import permissions, viewsets, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
@@ -59,3 +59,23 @@ class OrderViewSet(
 
         serializer = self.get_serializer(obj)
         return Response(serializer.data)
+
+    @action(
+        methods=['POST'],
+        detail=False,
+        url_path="create_payment",
+        serializer_class=serializers.OrderPaySerializer,
+        permission_classes=(permissions.IsAuthenticated, )
+    )
+    def create_payment(self, request):
+        """
+        TODO:
+            We should create a payment link for the user order to procced the payment.
+        """
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        res_data = serializer.create_payment()
+        return Response(
+            res_data,
+            status.HTTP_200_OK
+        )

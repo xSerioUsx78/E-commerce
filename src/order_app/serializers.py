@@ -3,6 +3,8 @@ from rest_framework import serializers
 
 from product_app.models import Product, ProductVariationItem
 from product_app.serializers import ProductGlobalSerializer, ProductVariationItemGlobalSerializer
+from order_app.models import Order
+from address_app.models import Address
 from . import models
 
 
@@ -135,3 +137,75 @@ class OrderCartSerializer(serializers.ModelSerializer):
             'total_discount_calculated',
             'items'
         )
+
+
+class OrderPaySerializer(serializers.Serializer):
+
+    address = serializers.IntegerField(
+        min_value=1,
+        required=False,
+        allow_null=True
+    )
+    method = serializers.ChoiceField(
+        choices=[
+            ("zarinpal", "Zarinpal"),
+            ("card_to_card", "Card to card"),
+            ("crypto", "Crypto")
+        ],
+        required=True
+    )
+
+    class Meta:
+        fields = (
+            'address',
+        )
+
+    def validate(self, attrs):
+        """
+        TODO:
+            Maybe we need to validate some fields that related to each other.
+        """
+        attrs = super().validate(attrs)
+
+        address = attrs.get('address')
+
+        request = self.context['request']
+
+        if address:
+            address = Address.objects.filter(
+                user=request.user,
+                id=address
+            ).first()
+            if not address:
+                serializers.ValidationError("آدرس یافت نشد.")
+            attrs['address'] = address
+
+        return attrs
+
+    def create_payment(self):
+        """
+        TODO:
+            We should check the method payment and create link or doing whatever needed
+            to procced the payment.
+        NOTE:
+            For now we only return a test link address.
+        """
+        request = self.context['request']
+        order = Order.objects.filter(
+            user=request.user
+        ).first()
+        if not order:
+            raise serializers.ValidationError("سفارش یافت نشد.")
+
+        data = self.validated_data
+        address = data.get('address')
+
+        if address:
+            order.address = address
+
+        """
+        TODO:
+            Create payment and return a link.
+        """
+
+        return {"payment_link": "http://localhost:8000"}

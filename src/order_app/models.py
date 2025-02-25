@@ -3,6 +3,7 @@ from django.contrib.auth import get_user_model
 
 from utils.models import TimestampedModel
 from product_app.models import Product, ProductVariationItem
+from address_app.models import Address
 
 
 User = get_user_model()
@@ -11,6 +12,12 @@ User = get_user_model()
 class Order(TimestampedModel):
     user = models.ForeignKey(
         User,
+        related_name="orders",
+        on_delete=models.SET_NULL,
+        null=True
+    )
+    address = models.ForeignKey(
+        Address,
         related_name="orders",
         on_delete=models.SET_NULL,
         null=True
