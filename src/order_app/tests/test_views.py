@@ -3,6 +3,7 @@ from rest_framework import status
 from utils.tests import APITestCase
 from product_app.models import Product, ProductVariation, ProductVariationItem
 from order_app.models import Order, OrderItem
+from address_app.models import Address
 
 
 class OrderItemTestCase(APITestCase):
@@ -571,3 +572,27 @@ class OrderTestCase(APITestCase):
 
                 product_variation = product_variation_item['product_variation']
                 self.assertIn('title', product_variation)
+
+    def test_create_payment_link_success(self):
+        self.authenticate(self.user)
+
+        url = f'{self.base_url}create-payment-link/'
+
+        Order.objects.create(user=self.user)
+        address = Address.objects.create(user=self.user)
+
+        data = {
+            "address": address.pk,
+            "method": "zarinpal"
+        }
+
+        res = self.client.post(
+            url,
+            data
+        )
+        self.assertEqual(
+            res.status_code,
+            status.HTTP_200_OK
+        )
+        json = res.json()
+        self.assertIn('payment_link', json)

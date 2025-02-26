@@ -158,6 +158,7 @@ class OrderCreatePaymentLinkSerializer(serializers.Serializer):
     class Meta:
         fields = (
             'address',
+            'method'
         )
 
     def validate(self, attrs):
@@ -167,17 +168,26 @@ class OrderCreatePaymentLinkSerializer(serializers.Serializer):
         """
         attrs = super().validate(attrs)
 
-        address = attrs.get('address')
-
         request = self.context['request']
 
+        order = Order.objects.filter(
+            user=request.user
+        ).first()
+        if not order:
+            raise serializers.ValidationError({'order': 'سفارش یافت نشد.'})
+
+        attrs['order'] = order
+
+        address = attrs.get('address')
         if address:
             address = Address.objects.filter(
                 user=request.user,
                 id=address
             ).first()
             if not address:
-                serializers.ValidationError("آدرس یافت نشد.")
+                raise serializers.ValidationError(
+                    {'address': 'آدرس یافت نشد.'}
+                )
             attrs['address'] = address
 
         return attrs
@@ -190,18 +200,12 @@ class OrderCreatePaymentLinkSerializer(serializers.Serializer):
         NOTE:
             For now we only return a test link address.
         """
-        request = self.context['request']
-        order = Order.objects.filter(
-            user=request.user
-        ).first()
-        if not order:
-            raise serializers.ValidationError("سفارش یافت نشد.")
-
-        data = self.validated_data
-        address = data.get('address')
+        order = self.validated_data.get('order')
+        address = self.validated_data.get('address')
 
         if address:
             order.address = address
+            order.save(update_fields=['address'])
 
         """
         TODO:

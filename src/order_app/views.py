@@ -64,7 +64,7 @@ class OrderViewSet(
         methods=['POST'],
         detail=False,
         url_path="create-payment-link",
-        serializer_class=serializers.OrderPaySerializer,
+        serializer_class=serializers.OrderCreatePaymentLinkSerializer,
         permission_classes=(permissions.IsAuthenticated, )
     )
     def create_payment_link(self, request):

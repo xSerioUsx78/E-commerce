@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     'product_app',
     'address_app',
     'payment_app',
+    'currency_app',
     'utils'
 ]
 
