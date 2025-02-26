@@ -5,7 +5,7 @@ from utils.models import TimestampedModel
 
 class CurrencyRate(TimestampedModel):
     currency = models.CharField(
-        max_length=3,
+        max_length=50,
         verbose_name="ارز",
         null=True
     )

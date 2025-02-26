@@ -36,6 +36,7 @@ INSTALLED_APPS = [
     'address_app',
     'payment_app',
     'currency_app',
+    'score_app',
     'utils'
 ]
 
@@ -123,4 +124,17 @@ SPECTACULAR_SETTINGS = {
     'DESCRIPTION': 'E-commerce API',
     'VERSION': '0.1.0',
     'SERVE_INCLUDE_SCHEMA': False
+}
+
+
+CELERY_TIMEZONE = "Asia/Tehran"
+CELERY_TASK_TRACK_STARTED = True
+CELERY_TASK_TIME_LIMIT = 30 * 60
+CELERY_BROKER_URL = 'amqp://'
+CELERY_BACKEND_URL = 'rpc://'
+CELERY_BEAT_SCHEDULE = {
+    'currency-rate-modify': {
+        'task': 'currency_app.tasks.currency_rate_modify_task',
+        'schedule': 1 * 3600
+    }
 }

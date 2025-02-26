@@ -13,8 +13,10 @@ class BrsAPI:
     ) -> dict:
         """
         Args:
-            key: gold, currency or cryptocurrency, default is "currency".
+            key: "gold", "currency" or "cryptocurrency", default is "currency".
             name: can be any gold, currency or cryptocurrency name to filter on.
+        Returns:
+            dict.
         """
 
         if name and not key:
