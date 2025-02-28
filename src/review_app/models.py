@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth import get_user_model
+from django.core.validators import MinValueValidator, MaxValueValidator
 from model_utils.fields import StatusField, MonitorField
 
 from utils.models import TimestampedModel
@@ -31,7 +32,11 @@ class Review(TimestampedModel):
     )
     score = models.PositiveSmallIntegerField(
         verbose_name="امتیاز",
-        null=True
+        null=True,
+        validators=[
+            MinValueValidator(1),
+            MaxValueValidator(5)
+        ]
     )
     STATUS = choices.Status.choices
     status = StatusField(
