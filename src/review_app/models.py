@@ -32,16 +32,13 @@ class Review(TimestampedModel):
     )
     score = models.PositiveSmallIntegerField(
         verbose_name="امتیاز",
-        null=True,
         validators=[
             MinValueValidator(1),
             MaxValueValidator(5)
         ]
     )
     STATUS = choices.Status.choices
-    status = StatusField(
-        null=True
-    )
+    status = StatusField()
     status_changed_at = MonitorField(
         monitor='status',
         when=[
@@ -49,7 +46,8 @@ class Review(TimestampedModel):
             choices.Status.REJECTED,
             choices.Status.PENDING
         ],
-        null=True
+        null=True,
+        blank=True
     )
 
     class Meta:
