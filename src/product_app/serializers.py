@@ -25,21 +25,3 @@ class ProductVariationItemGlobalSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.ProductVariationItem
         fields = ('product_variation', 'name', 'value')
-
-
-class ProductReviewSerializer(serializers.Serializer):
-    total_score = serializers.DecimalField(
-        max_digits=3,
-        decimal_places=2,
-        read_only=True
-    )
-    reviews = ReviewGlobalSerializer(
-        many=True,
-        read_only=True
-    )
-
-    class Meta:
-        fields = (
-            "total_score",
-            "reviews"
-        )

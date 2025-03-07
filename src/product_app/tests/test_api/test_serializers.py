@@ -5,7 +5,6 @@ from review_app.models import Review
 from review_app.serializers import ReviewGlobalSerializer
 from review_app.choices import Status
 from product_app.models import Product
-from product_app.serializers import ProductReviewSerializer
 
 
 class ProductReviewSerializerTestCase(APITestCase):
@@ -14,7 +13,7 @@ class ProductReviewSerializerTestCase(APITestCase):
         super().setUp()
 
         self.product = Product.objects.create()
-        self.serializer = ProductReviewSerializer
+        self.serializer = ReviewGlobalSerializer
 
     def test_serializer_data_success(self):
         Review.objects.create(
@@ -38,19 +37,28 @@ class ProductReviewSerializerTestCase(APITestCase):
         ).order_by(
             "-updated_at"
         )
-        total_score = Review.objects.aggregate(
-            total_score=Avg("score")
-        )['total_score'] or 0
-        serializer = self.serializer({
-            "total_score": total_score,
-            "reviews": ReviewGlobalSerializer(
-                reviews,
-                many=True
-            ).data
-        })
+        serializer = self.serializer(
+            reviews,
+            many=True
+        )
         data = serializer.data
-        print(data)
-        self.assertIn("total_score", data)
-        self.assertIn("reviews", data)
-        self.assertEqual(data['total_score'], 4.00)
-        self.assertEqual(len(data['reviews']), 3)
+        self.assertEqual(len(data), 3)
+        for obj in data:
+            self.assertIn('user', obj)
+            self.assertIn('description', obj)
+            self.assertIn('score', obj)
+
+    def test_serializer_data_empty_success(self):
+        reviews = Review.objects.filter(
+            product=self.product,
+            status=Status.APPROVED
+        ).order_by(
+            "-updated_at"
+        )
+
+        serializer = self.serializer(
+            reviews,
+            many=True
+        )
+        data = serializer.data
+        self.assertEqual(len(data), 0)
