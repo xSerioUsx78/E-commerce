@@ -1,6 +1,6 @@
 from rest_framework import permissions
 from rest_framework.viewsets import GenericViewSet
-from rest_framework.mixins import CreateModelMixin, UpdateModelMixin, ListModelMixin
+from rest_framework.mixins import CreateModelMixin, UpdateModelMixin
 
 from . import serializers
 from . import models
