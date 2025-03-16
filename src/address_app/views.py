@@ -7,7 +7,7 @@ from . import models
 
 
 class AddressViewSet(viewsets.ModelViewSet):
-    queryset = models.Address.objects.all()
+    queryset = models.Address.objects.all().order_by('-created_at')
     serializer_class = serializers.AddressSerializer
     permission_classes = (permissions.IsAuthenticated, )
 

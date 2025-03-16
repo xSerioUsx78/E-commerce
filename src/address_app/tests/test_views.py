@@ -30,9 +30,15 @@ class AddressAPITestCase(APITestCase):
 
         json = res.json()
 
-        self.assertTrue(len(json) == 2)
+        self.assertIn('count', json)
+        self.assertIn('next', json)
+        self.assertIn('previous', json)
+        self.assertIn('results', json)
 
-        for obj in json:
+        self.assertTrue(json['count'] == 2)
+
+        results = json['results']
+        for obj in results:
             self.assertIn("province", obj)
             self.assertIn("city", obj)
             self.assertIn("address", obj)

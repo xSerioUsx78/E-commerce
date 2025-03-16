@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'payment_app',
     'currency_app',
     'review_app',
+    'question_answer_app',
     'utils'
 ]
 
