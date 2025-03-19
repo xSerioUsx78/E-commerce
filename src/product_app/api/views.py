@@ -27,6 +27,8 @@ class ProductViewSet(
         reviews = Review.objects.filter(
             product=obj,
             status=ReviewStatus.APPROVED
+        ).select_related(
+            "user"
         ).order_by(
             "-updated_at"
         )
@@ -49,7 +51,12 @@ class ProductViewSet(
         obj = self.get_object()
         quesions_answers = QuestionAnswer.objects.filter(
             product=obj,
-            status=QuestionAnswerStatus.APPROVED
+            status=QuestionAnswerStatus.APPROVED,
+            replies__status=QuestionAnswerStatus.APPROVED
+        ).select_related(
+            "user"
+        ).prefetch_related(
+            "replies"
         ).order_by(
             "-updated_at"
         )
